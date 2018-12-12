@@ -1,0 +1,25 @@
+
+#g0 2013
+# portsenty.history to html
+# http://alog.ipduh.com/2013/07/portsentry.html
+
+PORTSENTRY_HISTORY="/var/lib/portsentry/portsentry.history"
+HTML="/var/www/sites/adm.ipduh/www/in/portsentry.history.html"
+
+awk '
+BEGIN {
+print "<!doctype html><html><head><title>portsentry.history</title><style>"
+print "a.lnk:link \{ color:#0000FF; text-decoration:none; \} a.lnk:visited \{ color:#0000FF; text-decoration:none; \}"
+print "a.lnk:hover \{ color:#00FF00; text-decoration:none; \} a.lnk:active \{ color:#00FF00; text-decoration:none; \}"
+print "</style></head><body><table border=0 cellspacing=8>"
+DEL=" </td><td> "; APRO="<a target=_blank class=lnk href=http://ipduh.com/apropos/?" ; P=">" ; OS="</a>" ;
+EPOC="<a class=lnk target=_blank href=http://ipduh.com/epoch/?";
+}
+{ split($6,a,"/") }
+{ print "<tr><td>" EPOC $1 P $1 OS DEL $3 DEL $4 DEL APRO a[1] P a[1] OS DEL }
+{ if (a[1] != a[2] ) {  print APRO a[2] P a[2] OS } }
+{ print DEL $8 DEL $9 "</td></tr>" }
+END { EPOCH=systime();
+print "</table><br /><br />Produced from portsentry.history on " EPOC EPOCH P EPOCH OS "</body></html>" }
+' ${PORTSENTRY_HISTORY} 2>/dev/null 1>${HTML}
+
