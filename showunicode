@@ -1,0 +1,97 @@
+#!/usr/bin/perl
+
+use strict;
+no warnings;
+
+=head1 Description
+
+showunicode is a simple program that displays unicode characters in your terminal emulator
+(if the appropiate fonts are installed on your system)
+
+=cut
+
+my $USAGE= <<"EOU";
+=head1 USAGE
+
+% showunicode | less
+
+% showunicode U+1234-U+12FF
+
+% showunicode hex
+
+% showunicode U+218f-U+23ff | less
+
+% showunicode  U+2190-U+21ff hex
+
+=cut
+
+EOU
+
+=head1 Author
+
+g0
+
+=head1 License
+
+Same as Perl, free software.
+
+=head1 Install ( in *nix and clones )
+
+# wget kod.ipduh.com/lib/showunicode && chmod 755 showunicode && mv showunicode /usr/bin/
+
+=cut
+
+my $PRINT_HEX=0;
+my $COLS=50;
+my $MIN=256;
+my $MAX=110_000;
+
+if(@ARGV){
+  $PRINT_HEX=1 if($ARGV[0] =~ /^hex/i);
+
+  if($ARGV[0] =~ /^U\+([0-9a-f]{1,6})-U\+([0-9a-f]{1,6})/i){
+    my ($from,$to)=(sprintf("%d",hex($1)),sprintf("%d",hex($2)));
+    if( $to > $from ){
+      if($ARGV[1] =~ /^hex/i) { $PRINT_HEX=1; }
+      unicode_range($from , $to);
+      print "\n";
+      exit 0;
+    } else {
+      print "U+$1 is greater than U+$2 \n";
+      exit 3;
+    }
+  }
+
+  if($ARGV[0] =~ /^U\+([0-9a-f]{1,6})/i){
+    my $code=$1;
+    print "U+$code: " if ($ARGV[1] =~ /^hex/i);
+    print chr sprintf("%d",hex($code)), "\n";
+    exit 0;
+  }
+
+  if($ARGV[0] =~ /^help|-h|-help|--h|--help/i){
+    print "\nShowunicode Usage Examples\n";
+    for my $line (split /\n/,$USAGE){
+      print "$line\n" unless ($line =~ /^=.*/);
+    }
+    print "\nWould you like to see the  perldoc for showunicode? [y/*]:";
+    my $answer=<STDIN>;
+      system("perldoc $0") if($answer =~ /^y|yes/i);
+    exit 0;
+  }
+}
+
+print "\n";
+unicode_range($MIN,$MAX);
+print "\n";
+exit 0;
+
+sub unicode_range {
+  my ($from,$to)=@_;
+  my $i;
+  $COLS=8 if ($PRINT_HEX);
+  for $i ($from..$to){
+    print sprintf("U+%x",$i) , ":" if ($PRINT_HEX);
+    print chr $i, ($i-$from+1)%$COLS?" ":"\n";
+  }
+}
