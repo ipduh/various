@@ -1,0 +1,48 @@
+#!/bin/bash
+#g0 2013
+#send an email with details of each ssh login
+#http://alog.ipduh.com/2013/07/email-notice-for-each-ssh-login.html
+
+###
+#set MAILTO to the email address(es) receiving the SSH LOGIN notices
+MAILTO="root@localhost"
+#MAILTO="system-watch@example.net, systems@example.org, spamtrap@bot.ipduh.com"
+###
+
+DATE=`date`
+EPOCH=`date +%s`
+EPOCH_URI="http://ipduh.com/epoch/?${EPOCH}"
+HOSTNAME=`hostname`
+
+if [ -z "$SSH_CONNECTION" ] ; then
+   IP=`echo $SSH_CLIENT |cut -f1 -d' '`
+else
+   IP=`echo $SSH_CONNECTION |cut -f1 -d' '`
+fi
+
+IP_URI="http://ipduh.com/apropos/?${IP}"
+LOGIN='no_login'
+
+if [ -z "$SSH_TTY" ] ; then
+   LOGIN="Connect by $USER"
+else
+   LOGIN="Login by $USER on $SSH_TTY"
+fi
+
+mail -s "SSH LOGIN on ${HOSTNAME} from ${IP}" ${MAILTO} <<END
+   ${LOGIN}
+   from ${IP} ( ${IP_URI} )
+   at ${DATE} ( ${EPOCH_URI} )
+END
+
+##if X11 forwarding is in use --man sshd
+#if read proto cookie && [ -n "$DISPLAY" ]; then
+#   if [ `echo $DISPLAY |cut -c1-10` = 'localhost:' ]; then
+#          # X11UseLocalhost=yes
+#          echo add unix:`echo $DISPLAY |cut -c11-` $proto $cookie
+#   else
+#          # X11UseLocalhost=no
+#          echo add $DISPLAY $proto $cookie
+#   fi | xauth -q -
+#fi
+
