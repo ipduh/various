@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# g0 2014, http://ipduh.com/contact
+# g0, 2014, http://ipduh.com/contact
+
+# the g0 (or ghetto) Load BalancER aka GLBer
+# which is a Bash script that writes a RouterOS script
+# that creates a RouterOS traffic load balancer.
+
 # GLBer Creates the RouterOS configuration commands and a RouterOS script for the g0 Load BalanER aka GLBer.
 # GLBer balances traffic among n point-to-point and point-to-multipoint interfaces.
 # GLBer NATs and Masquerades.
