@@ -13,7 +13,6 @@ if [ -z $1 ]; then
 fi
 
 for i in `dpkg -l |egrep "^ii" |cut -f3 -d' '`;do
-
   apt-cache depends ${i} |grep Depends: |grep ${1} > /dev/null
   if [ $? -eq 0 ]; then
 	  echo "--"
