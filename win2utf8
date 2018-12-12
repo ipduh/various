@@ -1,0 +1,28 @@
+#!/bin/bash
+# g0, 2013 , http://alog.ipduh.com/2013/03/to-greek-that-you-can-read-little-iconv.html
+# convert files in WINDOWS-1253 to UTF8
+# an iconv wrapper
+
+ICONV="/usr/bin/iconv"
+FILE_IN=${1}
+
+if [ $# -eq 1 ]; then
+
+if [ -f ${FILE_IN} ]; then
+        ${ICONV} -f WINDOWS-1253 -t UTF-8 ${FILE_IN} -o ${FILE_IN}.utf8
+        /bin/cat ${FILE_IN}.utf8
+        echo ""
+        echo ""
+        echo "win2utf8:${FILE_IN} encoded in UTF8 at ${FILE_IN}.utf8"
+        exit 0
+else
+        echo "${FILE_IN} does not exist"
+        exit 404
+fi
+
+else
+        echo "Please enter 1 File name"
+        exit 500
+
+fi
+
