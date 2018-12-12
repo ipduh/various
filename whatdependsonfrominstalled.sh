@@ -8,18 +8,18 @@ MEAT="/usr/bin/${ME}"
 
 # help
 if [ -z $1 ]; then
-	egrep '^##' ${MEAT}
-	exit 3
+  egrep '^##' ${MEAT}
+  exit 3
 fi
 
 for i in `dpkg -l |egrep "^ii" |cut -f3 -d' '`;do
 
-	apt-cache depends ${i} |grep Depends: |grep ${1} > /dev/null
-	if [ $? -eq 0 ]; then
+  apt-cache depends ${i} |grep Depends: |grep ${1} > /dev/null
+  if [ $? -eq 0 ]; then
 	  echo "--"
 	  echo ${i};
 	  apt-cache depends ${i}|grep ${1}
 	  echo "--"
-	fi
+  fi
 done
 
