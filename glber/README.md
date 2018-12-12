@@ -1,11 +1,10 @@
 glber
 ====
 
-
-the g0 (ghetto) Load BalancER aka GLBer
+the g0 (or ghetto) Load BalancER aka GLBer
 ====
 
-which is a bash script that writes a RouterOS script
+which is a Bash script that writes a RouterOS script
 ====
 
 that creates a RouterOS traffic load balancer.
