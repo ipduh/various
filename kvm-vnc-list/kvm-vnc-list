@@ -1,0 +1,35 @@
+#!/bin/bash
+# g0, 2014
+# List kvm-vnc sockets and process IDs
+
+
+function vnc-list
+{
+  ESC8='\033['
+  RESET=${ESC8}"00m"
+  RED=${ESC8}"31;01m"
+  GREEN=${ESC8}"01;32m"
+  MAGENTA=${ESC8}"01;35m"
+  BLUE=${ESC8}"01;34m"
+  CYAN=${ESC8}"01;36m"
+
+  COUNTER=0
+  for i in $(virsh -q list|awk '{print $2}');
+    do
+      PN=$(virsh vncdisplay $i|cut -f 2 -d ':')
+      VPORT=`expr ${PN} + 5900`
+      blah=`netstat -punta |grep $VPORT |awk '{print $4" "$5" "$7}'`
+      if [ `expr ${COUNTER} % 2` -eq "0" ]
+        then
+        printf " ${BLUE}%.20s :: %s${RESET}\n" "${i}" "${blah}"
+        else
+        printf " ${RED}%.20s :: %s${RESET}\n" "${i}" "${blah}"
+      fi
+      COUNTER=`expr ${COUNTER} + 1`
+    done
+}
+
+
+vnc-list
+
+# vi:syntax=sh
