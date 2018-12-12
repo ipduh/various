@@ -1,0 +1,36 @@
+#!/bin/bash
+# weed-out-from
+# g0 2012
+
+function help {
+        echo "weed-out-from usage: weed-out-from infected-list list-of-weeds"
+        exit 3
+}
+
+if [ -z $1 -o -z $2 ]
+then
+        help
+fi
+if [ ! -f $1 ]
+then
+        echo "weed-out-from: I cannot read the file $1"
+        help
+fi
+if [ ! -f $2 ]
+then
+        echo "weed-out-from: I cannot read the file $2"
+        help
+fi
+
+DIRTY=$1
+DIRT=$2
+
+for i in `cat $DIRTY`
+do
+        grep -i $i $DIRT &> /dev/null
+        if [ $? -ne 0 ]
+        then
+                echo $i
+        fi
+done
+
