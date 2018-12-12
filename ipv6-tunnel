@@ -1,0 +1,31 @@
+#!/bin/bash
+# IPv6 Tunnel
+# g0, 2011, ipduh.com/contact
+
+HERE='198.51.100.100'
+THERE='203.0.113.114'
+MYIP6='2001:470:1f0a:35d::2/64'
+TUIP6='2001:470:1f0a:35d::1/64'
+TUNAME='ip6-0'
+MYOIP6="2001:470:1f0a:35d::3/64 2001:470:1f0a:35d::3/64 2001:470:1f0a:35d::da/64"
+
+#$IP6_DEF_ROUTE='::/0'
+IP6_DEF_ROUTE='2000::/3'
+TTL=255 #sixxs suggests 64
+MTU=1280
+
+ip tunnel add ${TUNAME} mode sit remote ${THERE} local ${HERE} ttl ${TTL}
+ip link set ${TUNAME} up
+ip link set mtu ${MTU} dev ${TUNAME}
+
+ip addr add ${MYIP6} dev ${TUNAME}
+
+if [ -n "${MYOIP6}" ] ; then
+for IP6 in ${MYOIP6}; do
+        ip addr add ${IP6} dev ${TUNAME}
+done
+fi
+
+route -A inet6 add ${IP6_DEF_ROUTE} dev ${TUNAME}
+
+# vi syntax=shell
