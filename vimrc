@@ -1,5 +1,5 @@
 "g0 srv vimrc
-"[ "$EUID" -ne "0" ] &&  wget https://raw.githubusercontent.com/ipduh/vimrc/master/vimrc -O ~/.vimrc  || wget https://raw.githubusercontent.com/ipduh/various/master/vimrc -O /etc/vim/vimrc.local
+"[ "$EUID" -ne "0" ] &&  wget https://raw.githubusercontent.com/ipduh/various/master/vimrc -O ~/.vimrc  || wget https://raw.githubusercontent.com/ipduh/various/master/vimrc -O /etc/vim/vimrc.local
 
 if has("syntax")
   syntax on
