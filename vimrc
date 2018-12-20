@@ -17,7 +17,7 @@ set tabstop=2
 
 set expandtab
 
-autocmd BufRead,BufNewFile   *.pl,*.c,*.h,*.sh,*.html,*.js set noic cin
+autocmd BufRead,BufNewFile   *.pl,*.pm,*.c,*.cpp,*.h,*.asm,*.sh,*.html,*.js set noic cin
 autocmd BufRead,BufNewFile   *.py set shiftwidth=4 tabstop=4
 autocmd BufRead,BufNewFile   Makefile set noexpandtab
 
